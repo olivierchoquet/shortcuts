@@ -339,7 +339,11 @@ const DATA = {
   ["sudo bandwhich", "Débit réseau par processus et par destination"],
   ["sudo nethogs", "Débit réseau par processus"],
   ["vnstat -d", "Historique du trafic réseau par jour"],
-  ["nvtop", "Moniteur GPU (charge, mémoire vidéo)"]
+  ["nvtop", "Moniteur GPU (charge, mémoire vidéo)"],
+  ["sudo ss -tulpn", "Voir les ports ouverts en écoute et leur processus"],
+  ["sudo ss -tulpn | grep :8080", "Vérifier si un port précis est ouvert"],
+  ["sudo lsof -i :8080", "Quel processus utilise ce port"],
+  ["nmap 192.168.1.10", "Scanner les ports d'une machine du réseau (vue de l'extérieur)"]
  ],
  "Outils utiles": [
   ["glances", "Vue d'ensemble très complète (capteurs, Docker, mode web avec -w)"],

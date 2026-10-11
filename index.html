@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Aide-mémoire raccourcis</title>
+<style>
+:root{
+  --bg:#e9edf2; --panel:#f8fafc; --ink:#1c2533; --muted:#5b6778;
+  --line:#cfd7e2; --accent:#2f6fb5; --cap:#ffffff; --capEdge:#aab6c6; --mark:#ffe28a;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#161b24; --panel:#1f2632; --ink:#e3e8ef; --muted:#93a0b3;
+    --line:#2f3847; --accent:#6aa7ea; --cap:#2a3342; --capEdge:#11161e; --mark:#6b5a12; }
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);
+  font:15px/1.45 "Noto Sans","Cantarell","DejaVu Sans",system-ui,sans-serif}
+main{max-width:760px;margin:0 auto;padding:28px 20px 40px}
+h1{font-size:15px;font-weight:600;color:var(--muted);margin:0 0 10px}
+.search{display:flex;align-items:center;gap:10px;background:var(--panel);
+  border:1.5px solid var(--line);border-radius:10px;padding:10px 14px}
+.search:focus-within{border-color:var(--accent)}
+.search svg{flex:none;color:var(--muted)}
+#q{flex:1;border:0;background:transparent;color:var(--ink);font:inherit;font-size:20px;outline:none}
+#count{color:var(--muted);font-size:13px;white-space:nowrap}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 18px}
+.filters button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;
+  color:var(--ink);padding:4px 12px;border-radius:999px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.filters button:focus-visible,#list li:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+section h2{font-size:13px;font-weight:600;color:var(--accent);margin:18px 0 4px;padding-left:2px}
+ul{list-style:none;margin:0;padding:0}
+li{display:grid;grid-template-columns:minmax(200px,auto) 1fr;gap:16px;align-items:center;
+  padding:7px 8px;border-bottom:1px solid var(--line)}
+.keys{display:flex;flex-wrap:wrap;gap:4px;align-items:center;color:var(--muted);font-size:12px}
+kbd{font:600 12.5px/1 "Noto Sans Mono","DejaVu Sans Mono",monospace;color:var(--ink);
+  background:var(--cap);border:1px solid var(--capEdge);border-bottom-width:3px;
+  border-radius:5px;padding:4px 7px;min-width:24px;text-align:center}
+mark{background:var(--mark);color:inherit;border-radius:2px}
+.empty{color:var(--muted);padding:30px 4px}
+footer{margin-top:24px;color:var(--muted);font-size:12.5px}
+@media (max-width:520px){ li{grid-template-columns:1fr;gap:4px} }
+</style>
+</head>
+<body>
+<main>
+<h1>Raccourcis KDE Plasma &amp; Firefox</h1>
+<label class="search">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+  <input id="q" type="search" placeholder="Chercher une action ou une touche (ex. onglet, capture, ctrl t)" autocomplete="off" aria-label="Rechercher">
+  <span id="count"></span>
+</label>
+<div class="filters" id="filters"></div>
+<div id="list"></div>
+<footer>Échap efface la recherche (deux fois : ferme la fenêtre si possible). / revient à la recherche.</footer>
+</main>
+<script>
+const DATA = {
+ "KDE Plasma": [
+  [
+   "Meta",
+   "Ouvrir le menu des applications"
+  ],
+  [
+   "Alt+Espace|Alt+F2",
+   "KRunner (lancer une appli, calculer, chercher un fichier)"
+  ],
+  [
+   "Meta+W",
+   "Vue d'ensemble (fenêtres et bureaux)"
+  ],
+  [
+   "Meta+D",
+   "Afficher le bureau"
+  ],
+  [
+   "Alt+Tab|Alt+Maj+Tab",
+   "Fenêtre suivante / précédente"
+  ],
+  [
+   "Alt+F4",
+   "Fermer la fenêtre"
+  ],
+  [
+   "Alt+F3",
+   "Menu de la fenêtre"
+  ],
+  [
+   "Meta+PgPréc|Meta+PgSuiv",
+   "Maximiser / réduire la fenêtre"
+  ],
+  [
+   "Meta+←|Meta+→",
+   "Ancrer la fenêtre à gauche / à droite"
+  ],
+  [
+   "Meta+glisser",
+   "Déplacer une fenêtre depuis n'importe où"
+  ],
+  [
+   "Ctrl+F1|Ctrl+F4",
+   "Aller au bureau virtuel 1 à 4"
+  ],
+  [
+   "Meta+Ctrl+←|Meta+Ctrl+→",
+   "Bureau virtuel précédent / suivant"
+  ],
+  [
+   "Meta+V",
+   "Historique du presse-papiers"
+  ],
+  [
+   "Meta+.",
+   "Sélecteur d'émojis"
+  ],
+  [
+   "Meta+E",
+   "Ouvrir Dolphin (gestionnaire de fichiers)"
+  ],
+  [
+   "Ctrl+Alt+T",
+   "Ouvrir Konsole (terminal)"
+  ],
+  [
+   "Impr",
+   "Capture d'écran (Spectacle)"
+  ],
+  [
+   "Meta+Impr",
+   "Capture de la fenêtre active"
+  ],
+  [
+   "Meta+Maj+Impr",
+   "Capture d'une zone"
+  ],
+  [
+   "Ctrl+Échap",
+   "Moniteur système"
+  ],
+  [
+   "Meta+L",
+   "Verrouiller la session"
+  ],
+  [
+   "Ctrl+Alt+Suppr",
+   "Écran de déconnexion"
+  ]
+ ],
+ "Dolphin": [
+  [
+   "Ctrl+L",
+   "Saisir un chemin"
+  ],
+  [
+   "Ctrl+H",
+   "Afficher / masquer les fichiers cachés"
+  ],
+  [
+   "F2",
+   "Renommer"
+  ],
+  [
+   "F3",
+   "Vue scindée (deux panneaux)"
+  ],
+  [
+   "F4",
+   "Terminal intégré"
+  ],
+  [
+   "Alt+←|Alt+↑",
+   "Retour / dossier parent"
+  ],
+  [
+   "Ctrl+T|Ctrl+W",
+   "Nouvel onglet / fermer l'onglet"
+  ],
+  [
+   "Ctrl+I",
+   "Filtrer le dossier"
+  ],
+  [
+   "Ctrl+F",
+   "Rechercher des fichiers"
+  ],
+  [
+   "Ctrl+1|Ctrl+2|Ctrl+3",
+   "Vue icônes / compacte / détails"
+  ],
+  [
+   "Suppr|Maj+Suppr",
+   "Corbeille / suppression définitive"
+  ],
+  [
+   "Alt+Entrée",
+   "Propriétés"
+  ]
+ ],
+ "Konsole": [
+  [
+   "Ctrl+Maj+C|Ctrl+Maj+V",
+   "Copier / coller"
+  ],
+  [
+   "Ctrl+Maj+T|Ctrl+Maj+W",
+   "Nouvel onglet / fermer l'onglet"
+  ],
+  [
+   "Maj+←|Maj+→",
+   "Onglet précédent / suivant"
+  ],
+  [
+   "Ctrl+(|Ctrl+)",
+   "Scinder gauche-droite / haut-bas"
+  ],
+  [
+   "Ctrl+Maj+F",
+   "Rechercher dans la sortie"
+  ],
+  [
+   "Ctrl++|Ctrl+-",
+   "Agrandir / réduire le texte"
+  ],
+  [
+   "Ctrl+Maj+N",
+   "Nouvelle fenêtre"
+  ]
+ ],
+ "Firefox": [
+  [
+   "Ctrl+T|Ctrl+W",
+   "Nouvel onglet / fermer l'onglet"
+  ],
+  [
+   "Ctrl+Maj+T",
+   "Rouvrir le dernier onglet fermé"
+  ],
+  [
+   "Ctrl+Tab|Ctrl+Maj+Tab",
+   "Onglet suivant / précédent"
+  ],
+  [
+   "Ctrl+1|Ctrl+9",
+   "Aller à l'onglet n° (9 = dernier)"
+  ],
+  [
+   "Ctrl+N|Ctrl+Maj+P",
+   "Nouvelle fenêtre / navigation privée"
+  ],
+  [
+   "Ctrl+clic",
+   "Ouvrir un lien dans un nouvel onglet (ou clic molette)"
+  ],
+  [
+   "Ctrl+L|F6",
+   "Aller à la barre d'adresse"
+  ],
+  [
+   "Alt+←|Alt+→",
+   "Page précédente / suivante"
+  ],
+  [
+   "F5|Ctrl+Maj+R",
+   "Actualiser / actualiser sans cache"
+  ],
+  [
+   "Alt+Origine",
+   "Page d'accueil"
+  ],
+  [
+   "Espace|Maj+Espace",
+   "Défiler d'un écran vers le bas / le haut"
+  ],
+  [
+   "Origine|Fin",
+   "Haut / bas de la page"
+  ],
+  [
+   "Ctrl+F|F3",
+   "Rechercher dans la page / occurrence suivante"
+  ],
+  [
+   "Ctrl++|Ctrl+-|Ctrl+0",
+   "Zoom avant / arrière / réinitialiser"
+  ],
+  [
+   "F11",
+   "Plein écran"
+  ],
+  [
+   "Ctrl+Alt+R",
+   "Mode lecture"
+  ],
+  [
+   "Ctrl+D",
+   "Ajouter aux marque-pages"
+  ],
+  [
+   "Ctrl+Maj+B",
+   "Afficher / masquer la barre personnelle"
+  ],
+  [
+   "Ctrl+B|Ctrl+H",
+   "Panneau marque-pages / historique"
+  ],
+  [
+   "Ctrl+J",
+   "Téléchargements"
+  ],
+  [
+   "Ctrl+Maj+Suppr",
+   "Effacer l'historique récent"
+  ],
+  [
+   "Ctrl+P|Ctrl+S",
+   "Imprimer / enregistrer la page"
+  ],
+  [
+   "Ctrl+U",
+   "Code source"
+  ],
+  [
+   "F12",
+   "Outils de développement"
+  ]
+ ]
+};
+
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+  .replace(/\bmaj\b/g,"shift").replace(/\bsuper\b|\bwin\b/g,"meta");
+const items = [];
+for (const [app, rows] of Object.entries(DATA))
+  for (const [keys, label] of rows)
+    items.push({app, keys:keys.split("|"), label,
+      hay: norm(app+" "+label+" "+keys.replace(/[+|]/g," ")) + " " + norm(keys.replace(/\|/g," ").replace(/\+/g,""))});
+
+let current = "Tout";
+const q = document.getElementById("q"), list = document.getElementById("list"),
+      count = document.getElementById("count"), filters = document.getElementById("filters");
+
+["Tout", ...Object.keys(DATA)].forEach(name=>{
+  const b = document.createElement("button");
+  b.textContent = name; b.setAttribute("aria-pressed", name===current);
+  b.onclick = ()=>{ current=name; [...filters.children].forEach(x=>x.setAttribute("aria-pressed", x===b)); render(); q.focus(); };
+  filters.appendChild(b);
+});
+
+const esc = s => s.replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function highlight(text, words){
+  if(!words.length) return esc(text);
+  const n = norm(text); const marks = new Array(text.length).fill(false);
+  for(const w of words){ let i = n.indexOf(w); while(i>-1){ for(let k=i;k<i+w.length;k++) marks[k]=true; i=n.indexOf(w,i+1);} }
+  let out="", open=false;
+  [...text].forEach((ch,i)=>{ if(marks[i]&&!open){out+="<mark>";open=true} if(!marks[i]&&open){out+="</mark>";open=false} out+=esc(ch); });
+  return out+(open?"</mark>":"");
+}
+const keycaps = k => k.split(/\+(?!$)/).map(p=>`<kbd>${esc(p)}</kbd>`).join("+");
+
+function render(){
+  const words = norm(q.value).split(/\s+/).filter(Boolean);
+  const hits = items.filter(it => (current==="Tout"||it.app===current) && words.every(w=>it.hay.includes(w)));
+  count.textContent = hits.length + (hits.length>1?" résultats":" résultat");
+  if(!hits.length){ list.innerHTML = `<p class="empty">Aucun raccourci ne correspond à « ${esc(q.value)} ». Essaie un autre mot ou choisis « Tout ».</p>`; return; }
+  const groups = {};
+  hits.forEach(h => (groups[h.app] ||= []).push(h));
+  list.innerHTML = Object.entries(groups).map(([app, hs]) =>
+    `<section><h2>${app}</h2><ul>${hs.map(h=>
+      `<li><span class="keys">${h.keys.map(keycaps).join(" ou ")}</span><span>${highlight(h.label, words)}</span></li>`).join("")}</ul></section>`).join("");
+}
+q.addEventListener("input", render);
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape"){ if(q.value){ q.value=""; render(); } else { window.close(); } q.focus(); }
+  else if(e.key==="/" && document.activeElement!==q){ e.preventDefault(); q.focus(); }
+});
+const preset = new URLSearchParams(location.search).get("q");
+if (preset) q.value = preset;
+render(); q.focus();
+</script>
+</body>
+</html>
